@@ -1,25 +1,29 @@
 package org.web.data.extra.service
 
+import org.cqbot.dev.data.Character
+import org.cqbot.dev.data.CharacterHolder
 import org.jsoup.Jsoup
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.web.data.extra.constant.Constants.CHARACTER_TYPE
 import org.web.data.extra.constant.Constants.ETC
 import org.web.data.extra.constant.Constants.THIRTY
 import org.web.data.extra.constant.Constants.WIKI_BASE_PATH
 import org.web.data.extra.constant.Constants.WIKI_PATH
-import org.web.data.extra.data.Character
-import org.web.data.extra.data.CharacterHolder
+import org.web.data.extra.repository.CharacterRepository
 import java.util.*
 
 //@Slf4j
 @Service
-class CacheChatacterServer : IServer {
+class CacheCharacterServer : IServer {
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
+    @Autowired
+    private lateinit var characterRepository: CharacterRepository
 
-    override fun cacheWebCharacters(): List<CharacterHolder> {
+    override fun getAllCharactersFromWeb(): List<CharacterHolder> {
         val successOrNot = cacheAllCharacterFromWeb()
         log.info("缓存成功了没{}", successOrNot)
         return getAllCharacters()
@@ -33,7 +37,10 @@ class CacheChatacterServer : IServer {
     }
 
     fun getAllCharacters(): List<CharacterHolder> {
-        return characters
+        return characterRepository.getAll()
+    }
+    fun refreshAll(){
+        characterRepository.saveAll(getAllCharactersFromWeb())
     }
 
     private fun generateAllFromWeb(): List<CharacterHolder> {
@@ -93,9 +100,9 @@ class CacheChatacterServer : IServer {
     }
 
     private fun processContent(heroStory: String, quote: String): String {
-        var result = heroStory
+//        var result = heroStory
 
-        result = if (heroStory.isNullOrEmpty()) quote else heroStory
+      var  result = heroStory.ifEmpty { quote }
 
         if (result.length > THIRTY)
             result = result.substring(0, THIRTY) + ETC
@@ -103,12 +110,9 @@ class CacheChatacterServer : IServer {
     }
 
     private fun defaultImgUrl(heroImgUrl: String): String {
-        return if (heroImgUrl.isNullOrEmpty()) WIKI_BASE_PATH else heroImgUrl
+        return heroImgUrl.ifEmpty { WIKI_BASE_PATH }
     }
 
-    override fun loadCustomFile(): List<String> {
-        TODO("Not yet implemented")
-    }
 }
 
 //fun main() {

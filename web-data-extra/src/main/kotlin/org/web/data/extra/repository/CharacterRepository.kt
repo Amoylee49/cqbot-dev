@@ -1,34 +1,52 @@
 package org.web.data.extra.repository
 
 import com.fasterxml.jackson.core.type.TypeReference
+import org.cqbot.dev.data.CharacterHolder
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import org.web.data.extra.data.CharacterHolder
+import org.web.data.extra.config.CqBotConfig
 import org.web.data.extra.util.JsonUtils
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
+import java.nio.file.Files
+import java.nio.file.Paths
+import kotlin.io.path.name
 
-fun main() {
-//    JsonUtils.loadCharacterJson()
-    println(CharacterRepository().readCharacterAsStream())
-}
+//fun main() {
+////    JsonUtils.loadCharacterJson()
+//    println(CharacterRepository().readCharacterAsStream())
+//}
 @Component
-class CharacterRepository {
+class CharacterRepository : NormalFileRepository<CharacterHolder>() {
 
+    @Autowired
+    lateinit var botConfig: CqBotConfig
 
-    fun readCharacterAsStream(): String? {
-        ClassLoader.getSystemResourceAsStream("Character.json").use { inputStream ->
-            val bis = BufferedInputStream(inputStream)
-            val bys = ByteArrayOutputStream()
-            var result = bis.read()
-            while (result != -1) {
-                bys.write(result.toByte().toInt())
-                result = bis.read()
-            }
-            val json = bys.toString("UTF-8")
-//            return JsonUtils.toObj(json, object : TypeReference<List<CharacterHolder>?>() {})
-            return json
+    override fun getFilePath(): String {
+        return botConfig.filePath + "Characters.json"
+//        return "E:\\JavaProject\\cqbot-dev\\data\\"+"Characters.json"
+    }
+
+    override fun getAll(): List<CharacterHolder> {
+        val fileName = Paths.get(getFilePath())
+//        print(fileName.name)
+        val readText = Files.newBufferedReader(fileName).readText()
+        return JsonUtils.toObj(readText, object : TypeReference<List<CharacterHolder>?>() {})!!
+    }
+
+    override fun processDelete(paramT: CharacterHolder, paramList: List<CharacterHolder>): List<CharacterHolder> {
+        var characterList = ArrayList<CharacterHolder>()
+        characterList.removeIf { it ->
+            it.character.pageUrl == paramT.character.pageUrl
         }
+        return characterList
     }
 
 }
 
+/*
+fun main(){
+//    println(CharacterRepository().getAll())
+//    println(CustomRuleRepository().getAll())
+    println(SimpleTextRepository().getAll())
+}*/

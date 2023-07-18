@@ -7,6 +7,7 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.6")
     implementation("io.vertx:vertx-core:4.4.1")
     implementation("org.mockito:mockito-core:2.23.4")
+    implementation(project(":common-structure")) //可以引入
 }
 //kapt {
 //

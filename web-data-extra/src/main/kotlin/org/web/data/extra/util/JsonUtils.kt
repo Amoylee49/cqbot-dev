@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.web.data.extra.service.CacheChatacterServer
+import org.web.data.extra.service.CacheCharacterServer
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -31,14 +31,14 @@ import java.text.SimpleDateFormat
 object JsonUtils {
 
     fun loadCharacterJson() {
-        val server: CacheChatacterServer = CacheChatacterServer()
+        val server: CacheCharacterServer = CacheCharacterServer()
         server.cacheAllCharacterFromWeb()
         val allCharacters = server.getAllCharacters()
 
         val str: String? = JsonUtils.toStr(allCharacters)
 //        var strs = "w34234"
 
-        val path = Paths.get("data/Character.json")
+        val path = Paths.get("data/Characters.json")
 
 //        if (!path.exists()){
 //            path.createFile(FileAttribute<String>)
@@ -79,7 +79,7 @@ object JsonUtils {
     }
 
 
-    fun toStr(o: Any?): String? {
+    fun toStr(o: Any): String? {
         try {
             return OBJECT_MAPPER.writeValueAsString(o)
         } catch (e: JsonProcessingException) {
@@ -88,7 +88,7 @@ object JsonUtils {
         return null
     }
 
-    fun <T> toObj(str: String?, clazz: Class<T>?): T? {
+    fun <T> toObj(str: String?, clazz: Class<T>): T? {
         try {
             return OBJECT_MAPPER.readValue(str, clazz)
         } catch (e: Exception) {
@@ -97,7 +97,7 @@ object JsonUtils {
         return null
     }
 
-    fun <T> toObj(str: String?, valueTypeRef: TypeReference<T>?): T? {
+    fun <T> toObj(str: String, valueTypeRef: TypeReference<T>): T? {
         try {
             return OBJECT_MAPPER.readValue(str, valueTypeRef)
         } catch (e: Exception) {
@@ -105,4 +105,5 @@ object JsonUtils {
         }
         return null
     }
+
 }

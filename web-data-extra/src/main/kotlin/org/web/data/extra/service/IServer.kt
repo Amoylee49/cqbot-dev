@@ -1,10 +1,16 @@
 package org.web.data.extra.service
 
-import org.web.data.extra.data.CharacterHolder
-import org.web.data.extra.data.Characters
+import org.cqbot.dev.data.CharacterHolder
+import org.cqbot.dev.data.CustomRule
 
 interface IServer {
-     fun cacheWebCharacters(): List<CharacterHolder>
+    fun getAllCharactersFromWeb(): List<CharacterHolder> {
+        return emptyList()
+    }
 
-     fun loadCustomFile(): List<String>
+    open fun loadCustomFile(): List<CustomRule>{
+        return listOf()
+    }
+//
+//
 }

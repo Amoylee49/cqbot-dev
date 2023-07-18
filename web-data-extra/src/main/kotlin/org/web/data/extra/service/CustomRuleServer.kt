@@ -1,14 +1,35 @@
 package org.web.data.extra.service
 
-import org.web.data.extra.data.CharacterHolder
-import org.web.data.extra.data.Characters
+import org.cqbot.dev.data.CustomRule
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.web.data.extra.data.StatusResponse
+import org.web.data.extra.repository.CustomRuleRepository
+import org.web.data.extra.util.ResponseUtils
 
-class CustomRuleServer:IServer {
-    override fun cacheWebCharacters(): MutableList<CharacterHolder> {
-        TODO("Not yet implemented")
+
+@Service
+class CustomRuleServer : IServer {
+
+    @Autowired
+    private lateinit var customRuleRepository: CustomRuleRepository
+
+    fun getAllCustomRules(): List<CustomRule>? {
+        return customRuleRepository.getAll()
     }
 
-    override fun loadCustomFile(): List<String> {
-        TODO("Not yet implemented")
+    fun addOrUpdate(customRule: CustomRule) {
+        return customRuleRepository.addOrUpdate(customRule)
     }
+    fun delete(customRule: CustomRule){
+        customRuleRepository.delete(customRule)
+    }
+
+//    @GetMapping(path = ["/getByName"])
+//    fun getCharacterByName(@RequestParam("name") @NotNull name: String?): StatusResponse<CharacterHolder?>? {
+//        Intrinsics.checkNotNullParameter(name, "name")
+//        return ResponseUtils.Companion.ok(getCharacterService().getCharacterByName(name))
+//    }
+
+
 }

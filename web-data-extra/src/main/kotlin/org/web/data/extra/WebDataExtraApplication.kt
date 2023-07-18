@@ -1,13 +1,7 @@
 package org.web.data.extra
 
-import io.vertx.core.Promise
-import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.stereotype.Component
-import org.web.data.extra.repository.CharacterRepository
-import org.web.data.extra.repository.socket.SocketTask
-import java.util.*
 
 @SpringBootApplication
 class WebDataExtraApplication
@@ -16,8 +10,11 @@ fun main(args: Array<String>) {
     runApplication<WebDataExtraApplication>(*args)
 }
 
-@Component
-class initSocketVertX : CommandLineRunner {
+@Volatile
+var switch: Boolean = true
+
+/*@Component
+class InitSocketVertX : CommandLineRunner {
     override fun run(vararg args: String?) {
         print("init CommandLineRunner")
         val repository = CharacterRepository()
@@ -25,13 +22,24 @@ class initSocketVertX : CommandLineRunner {
         val socketTask = SocketTask(repository)
         socketTask.init(socketTask.vertx, null)
         val scanner = Scanner(System.`in`)
-        var switch: Boolean = true
 
-        while (scanner.hasNext()) {
+//        @Volatile
+//        val num = 0
+
+        while (switch && scanner.hasNextLine()) {
+            print("scnner heart beat=====$switch")
             switch = false
             socketTask.start(Promise.promise())
-            Thread.sleep(15_000)
+//            Thread.sleep(15_000)
         }
+
+//        Thread {
+//            while (true){
+//                print("heart beat=====")
+//                TimeUnit.SECONDS.sleep(3)
+//                switch = true
+//            }
+//        }
     }
 
-}
+}*/

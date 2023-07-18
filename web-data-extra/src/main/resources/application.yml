@@ -1,0 +1,11 @@
+server:
+  port: 8083
+logging:
+  level:
+    root: info
+spring:
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+cqbot:
+  filePath: 'E:\JavaProject\cqbot-dev\data\'

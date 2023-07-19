@@ -17,9 +17,8 @@ object SimpleTextCache: AbstractCache<String>() {
     }
 
     override fun loadCaches() {
-        val path = Paths.get(getPath())
-        val allLines =  Files.newBufferedReader(path).readLines()
-        this.setCache(allLines)
+        val readLines = super.readFile().readLines()
+        this.setCache(readLines)
     }
 
     override fun setCache(paramList: List<String>) {

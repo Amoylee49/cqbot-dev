@@ -19,8 +19,7 @@ object CharacterCache : AbstractCache<CharacterHolder>() {
     }
 
     override fun loadCaches() {
-        val path = Paths.get(getPath())
-        val allLines =  Files.newBufferedReader(path).readText()
+        val allLines = super.readFile().readText()
         val cacheList = JsonUtils.toObj(allLines, object : TypeReference<List<CharacterHolder>?>() {})!!
         setCache(cacheList)
     }

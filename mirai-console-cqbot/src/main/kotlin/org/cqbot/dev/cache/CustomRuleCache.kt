@@ -17,8 +17,7 @@ object CustomRuleCache: AbstractCache<CustomRule>() {
     }
 
     override fun loadCaches() {
-        val path = Paths.get(getPath())
-        val allLines =  Files.newBufferedReader(path).readText()
+        val allLines =  super.readFile().readText()
         val cacheList = JsonUtils.toObj(allLines, object : TypeReference<List<CustomRule>?>() {})!!
         this.setCache(cacheList)
     }

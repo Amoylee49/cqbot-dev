@@ -1,19 +1,24 @@
 package org.cqbot.dev.cache
 
-import com.fasterxml.jackson.core.type.TypeReference
-import org.cqbot.dev.util.JsonUtils
+import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Paths
 
 abstract class AbstractCache<T> {
 
-   /* open fun loadCaches() {  //泛型T 现在没有？LinkedHashMap cannot be cast to class org.cqbot.dev.data.CustomRule
+    /* open fun loadCaches() {  //泛型T 现在没有？LinkedHashMap cannot be cast to class org.cqbot.dev.data.CustomRule
+         val path = Paths.get(getPath())
+         val allLines =  Files.newBufferedReader(path).readText()
+         val cacheList = JsonUtils.toObj(allLines, object : TypeReference<List<T>?>() {})!!
+         setCache(cacheList)
+     //        JsonUtils.toObj(allLines, object : TypeReference<List<CustomRule>?>() {})!!
+     }*/
+
+    fun readFile(): BufferedReader {
         val path = Paths.get(getPath())
-        val allLines =  Files.newBufferedReader(path).readText()
-        val cacheList = JsonUtils.toObj(allLines, object : TypeReference<List<T>?>() {})!!
-        setCache(cacheList)
-    //        JsonUtils.toObj(allLines, object : TypeReference<List<CustomRule>?>() {})!!
-    }*/
+        return Files.newBufferedReader(path)
+    }
+
     abstract fun loadCaches()
 
     abstract fun setCache(paramList: List<T>)

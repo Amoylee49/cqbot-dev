@@ -14,6 +14,7 @@ abstract class AbstractCache<T> {
      //        JsonUtils.toObj(allLines, object : TypeReference<List<CustomRule>?>() {})!!
      }*/
 
+    private lateinit var caches: List<T>
     fun readFile(): BufferedReader {
         val path = Paths.get(getPath())
         return Files.newBufferedReader(path)
@@ -21,8 +22,13 @@ abstract class AbstractCache<T> {
 
     abstract fun loadCaches()
 
-    abstract fun setCache(paramList: List<T>)
-    abstract fun getAll(): List<T>
+    fun setCache(paramList: List<T>) {
+        this.caches = paramList
+    }
+
+    fun getAll(): List<T> {
+        return this.caches
+    }
 
     abstract fun getPath(): String
 }

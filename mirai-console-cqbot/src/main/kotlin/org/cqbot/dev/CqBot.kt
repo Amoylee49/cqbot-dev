@@ -20,7 +20,7 @@ import java.io.File
 //插件主入口 META-INF.services
 object CqBot : KotlinPlugin(JvmPluginDescription(
     id = "org.cqbot.dev",
-    name = "KotlinPlugin 示例 信息",
+    name = "######### KotlinPlugin 示例 信息 ##############",
     version = "1.1.0"
 ) {
     author("作者名称或联系方式")

@@ -1,11 +1,10 @@
 package org.cqbot.dev.message
 
-import org.cqbot.dev.cache.CharacterCache
 import net.mamoe.mirai.message.code.MiraiCode
 import net.mamoe.mirai.message.data.MessageChain
-import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.data.buildMessageChain
+import org.cqbot.dev.cache.CharacterCache
 import java.util.stream.Collectors
 
 /**
@@ -15,29 +14,33 @@ object HeroMessageProcess : MessageProcess() {
 
     override val command: String = "(^\\s*qr)|(^\\s*查询)"
 
-    override fun process(message: String): MessageChain {
+    override fun process(message: String): MessageChain? {
 
         val rawMessage = getCommandParameter(message)[0]
-
+        if (rawMessage.isEmpty())
+            return null
         val characterHolders = CharacterCache.getAll()
         val characters = characterHolders.stream().filter { characterHolders ->
             val nickNames = characterHolders.nickNames
             rawMessageWithNickNames(nickNames, rawMessage)
         }.map { characterHolders -> characterHolders.character }
-            .findAny().get()
-//            .collect(Collectors.toList())
-        return buildMessageChain {
-            +PlainText(characters.imageUrl)
-            +PlainText("人物名称："+characters.name)
-            +PlainText(characters.pageUrl)
+            .collect(Collectors.toList())
+        if (characters.isNotEmpty()) {
+            return buildMessageChain {
+                for (characters in characters) {
+//                    +PlainText(characters.imageUrl)
+                    +PlainText(characters.name)
+                    +PlainText(characters.pageUrl)
+                }
+            }
         }
-
+        return null
     }
 
     private fun rawMessageWithNickNames(names: List<String>, rawMessage: String): Boolean {
         names.forEach {
-            it.startsWith(rawMessage) || it.endsWith(rawMessage)
-            return true
+            if (it.startsWith(rawMessage) || it.endsWith(rawMessage))
+                return true
         }
         return false
     }

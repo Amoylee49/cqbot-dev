@@ -7,6 +7,7 @@ import java.nio.file.Paths
 
 object SimpleTextCache: AbstractCache<String>() {
 
+    private lateinit var caches: List<String>
     override fun getAll(): List<String> {
         return this.caches
     }
@@ -18,6 +19,10 @@ object SimpleTextCache: AbstractCache<String>() {
     override fun loadCaches() {
         val path = Paths.get(getPath())
         val allLines =  Files.newBufferedReader(path).readLines()
-        this.caches = allLines
+        this.setCache(allLines)
+    }
+
+    override fun setCache(paramList: List<String>) {
+        this.caches = paramList
     }
 }

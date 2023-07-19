@@ -1,18 +1,11 @@
 package org.cqbot.dev
 
-import org.cqbot.dev.message.CustomRulesProcess
-import org.cqbot.dev.message.HeroMessageProcess
-import org.cqbot.dev.message.MessageProcess
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.MessageChain
-import net.mamoe.mirai.message.data.buildMessageChain
-import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
+import org.cqbot.dev.message.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.InputStream
-import java.net.URL
 
 object GroupChannel {
 
@@ -20,7 +13,9 @@ object GroupChannel {
 
     fun subEventChannel(eventChannel: EventChannel<Event>) {
         log.info("++++++++++++++++ PluginLoad 加载成功 +++++++++++")
-        val listProcess = listOf<MessageProcess>(HeroMessageProcess, CustomRulesProcess)
+        val listProcess = listOf<MessageProcess>(
+            HeroMessageProcess, CustomRulesProcess, TipProcess, SimpleTextProcess
+        )
         //配置文件目录 "${dataFolder.absolutePath}/"
 //        val eventChannel = GlobalEventChannel.parentScope(this)
         eventChannel.subscribeAlways<GroupMessageEvent> {
@@ -28,11 +23,18 @@ object GroupChannel {
             val rawMessage = message.contentToString()
             for (messageProcess in listProcess) {
                 if (!messageProcess.isMatch(rawMessage)) continue
-                val messageChain = messageProcess.process(rawMessage) as MessageChain
-                group.sendMessage(messageChain)
-                //不继续处理
-                return@subscribeAlways
+                val messageChain = messageProcess.process(rawMessage)
+                try {
+                    if (messageChain != null) {
+                        group.sendMessage(messageChain)
+                    }
+                } catch (e: Exception) {
+                    log.error("send group message fail, message is empty")
+                }
+
             }
+            //不继续处理
+            return@subscribeAlways
 
             /* 发送image参考：
         //如何发送图片： https://github.com/mamoe/mirai/discussions/864

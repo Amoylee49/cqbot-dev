@@ -44,9 +44,11 @@ class CharacterRepository : NormalFileRepository<CharacterHolder>() {
 
 }
 
-/*
-fun main(){
+/*fun main(){
 //    println(CharacterRepository().getAll())
 //    println(CustomRuleRepository().getAll())
-    println(SimpleTextRepository().getAll())
+//    println(SimpleTextRepository().getAll())
+    val all = CustomRuleRepository().getAll()
+    println(all[0].name)
+    println(all[0].data)
 }*/

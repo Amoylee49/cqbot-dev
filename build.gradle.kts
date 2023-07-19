@@ -54,7 +54,6 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         api("net.mamoe", "mirai-logging-slf4j-logback", "2.13.2")
-        api(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 //        implementation(project("common-structure" ,"default")) //可以引入
 //        exclude group: 'net.mamoe', module: 'mirai-core-api'
     }

@@ -12,7 +12,8 @@ object SimpleTextProcess: MessageProcess() {
 
     override fun process(message: String): MessageChain?{
         val rawMessage = getCommandParameter(message)[0]
-
+        if (rawMessage.isBlank())
+            return null
         val list = SimpleTextCache.getAll()
 
         for (text in list){

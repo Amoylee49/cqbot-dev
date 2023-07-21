@@ -29,8 +29,8 @@ object HeroMessageProcess : MessageProcess() {
             return buildMessageChain {
                 for (characters in characters) {
 //                    +PlainText(characters.imageUrl)
-                    +PlainText(characters.name)
-                    +PlainText(characters.pageUrl)
+                    +PlainText(characters.name+"\n")
+                    +PlainText(characters.pageUrl+"\n")
                 }
             }
         }

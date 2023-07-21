@@ -9,8 +9,11 @@ import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.NewFriendRequestEvent
+import org.cqbot.dev.cache.ShipCache
+import org.cqbot.dev.constant.Constants
 import org.cqbot.dev.constant.Constants.characterFileName
 import org.cqbot.dev.constant.Constants.customRuleFileName
+import org.cqbot.dev.constant.Constants.shipFileName
 import org.cqbot.dev.constant.Constants.simpleTransferFileName
 import org.cqbot.dev.setting.MainSetting
 import org.slf4j.Logger
@@ -59,14 +62,15 @@ object CqBot : KotlinPlugin(JvmPluginDescription(
 
     private fun checkSettingAndLoadFile(){
 
-        listOf(characterFileName, customRuleFileName, simpleTransferFileName).stream().forEach {
+        listOf(shipFileName,characterFileName, customRuleFileName, simpleTransferFileName).stream().forEach {
            var abstractPath = MainSetting.filePath+it
             log.info("这是文件名路径{}",abstractPath)
             if (!File(abstractPath).exists())
                 log.error("机器人未找到配置文件")
         }
 
-        var list = listOf(CharacterCache, CustomRuleCache, SimpleTextCache)
+        var list = listOf(ShipCache,CharacterCache, CustomRuleCache, SimpleTextCache)
+//        var list = listOf(ShipCache)
 
         list.forEach {
             it.loadCaches()

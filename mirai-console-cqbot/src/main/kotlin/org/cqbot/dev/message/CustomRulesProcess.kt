@@ -12,6 +12,8 @@ object CustomRulesProcess : MessageProcess() {
     //message qr 夏洛特
     override fun process(message: String): MessageChain? {
         val rawMessage = getCommandParameter(message)[0]
+        if (rawMessage.isBlank())
+            return null
 
         val customRules = CustomRuleCache.getAll()
 

@@ -4,6 +4,7 @@ import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import org.cqbot.dev.message.*
+import org.cqbot.dev.message.blhx.ShipMessageProcess
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -15,6 +16,7 @@ object GroupChannel {
         log.info("++++++++++++++++ PluginLoad 加载成功 +++++++++++")
         val listProcess = listOf<MessageProcess>(
             HeroMessageProcess, CustomRulesProcess, TipProcess, SimpleTextProcess
+            ,ShipMessageProcess()
         )
         //配置文件目录 "${dataFolder.absolutePath}/"
 //        val eventChannel = GlobalEventChannel.parentScope(this)
@@ -27,6 +29,7 @@ object GroupChannel {
                 try {
                     if (messageChain != null) {
                         group.sendMessage(messageChain)
+//                        bot.getFriend(1185522657)?.sendMessage(messageChain)
                     }
                 } catch (e: Exception) {
                     log.error("send group message fail, message is empty")
@@ -56,27 +59,6 @@ object GroupChannel {
              //直接传入 InputStream 和 图片格式
              group.sendImage(File("file").inputStream(), "gif")
          }*/
-
-
-            /*if (messageProcess.isMatch(rawMessage)) {
-                val messChain = messageProcess.process(rawMessage)
-                if (messChain != null) {
-                    val imageUrl = messChain[0].contentToString()
-                    // kotlin
-                    val inputStream: InputStream = URL(imageUrl).openStream()
-                    val resource = inputStream.use { it.toExternalResource().toAutoCloseable() }
-                    //② 先上传图片，获得 Image
-                    group.uploadImage(resource).also {
-                        // ② 和其他类型消息一起发送
-                        group.sendMessage(buildMessageChain {
-                            add(it)
-                            for (singleMess in messChain.drop(1)) { // i in [1, 10), 不包含 10
-                                add(singleMess)
-                            }
-                        })
-                    }
-                }
-            }*/
         }
     }
 }

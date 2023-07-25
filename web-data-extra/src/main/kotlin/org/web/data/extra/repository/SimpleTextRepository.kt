@@ -14,8 +14,8 @@ class SimpleTextRepository : NormalFileRepository<String>() {
     @Autowired
     lateinit var cqBotConfig: CqBotConfig
     override fun getFilePath(): String? {
-//        return cqBotConfig.filePath + "SimpleTransfers.txt"
-        return "data/SimpleTransfers.txt"
+        return cqBotConfig.filePath + "SimpleTransfers.txt"
+//        return "data/SimpleTransfers.txt"
     }
 
     override fun getAll(): List<String> {

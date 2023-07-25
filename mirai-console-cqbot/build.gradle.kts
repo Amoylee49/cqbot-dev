@@ -31,6 +31,7 @@ dependencies {
 //    implementation(project(":data")) //注意这里
 //    implementation("io.vertx:vertx-core:4.4.1")
 //    implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2") 打包插件
+    implementation("commons-io:commons-io:2.13.0")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
 }

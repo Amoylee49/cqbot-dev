@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.web.data.extra.config.CqBotConfig
 import org.web.data.extra.util.JsonUtils
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 import java.nio.file.Paths
-import kotlin.io.path.name
 
 //fun main() {
 ////    JsonUtils.loadCharacterJson()
@@ -44,11 +41,13 @@ class CharacterRepository : NormalFileRepository<CharacterHolder>() {
 
 }
 
-/*fun main(){
+/*
+fun main(){
 //    println(CharacterRepository().getAll())
 //    println(CustomRuleRepository().getAll())
 //    println(SimpleTextRepository().getAll())
-    val all = CustomRuleRepository().getAll()
-    println(all[0].name)
-    println(all[0].data)
-}*/
+    //val all = CustomRuleRepository().getAll()
+//    println(all[0].name)
+//    println(all[0].data)
+}
+*/

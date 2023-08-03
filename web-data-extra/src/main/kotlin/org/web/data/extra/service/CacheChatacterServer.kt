@@ -39,17 +39,20 @@ class CacheCharacterServer : IServer {
     fun getAllCharacters(): List<CharacterHolder> {
         return characterRepository.getAll()
     }
-    fun refreshAll(){
+
+    fun refreshAll() {
         characterRepository.saveAll(getAllCharactersFromWeb())
     }
 
-    private fun generateAllFromWeb(): List<CharacterHolder> {
+    fun generateAllFromWeb(): List<CharacterHolder> {
         var result: LinkedList<CharacterHolder> = LinkedList()
+
         for (type in CHARACTER_TYPE) {
             var url = WIKI_PATH + type
-
             result.addAll(processTypePage(url))
         }
+        result.addAll(processLowerStarPage(WIKI_PATH, 1))
+        result.addAll(processLowerStarPage(WIKI_PATH, 2))
         return result
     }
 
@@ -71,6 +74,28 @@ class CacheCharacterServer : IServer {
             listHolder.add(characterHolder)
         }
 
+        return listHolder
+    }
+
+    //解析低星小人页面 #mw-pages > div > div > div:nth-child(1) > ul > li:nth-child(1) > a
+    fun processLowerStarPage(url: String, star: Number): LinkedList<CharacterHolder> {
+        log.info(
+            "访问低星小人页面：{https://wiki.biligame.com/cq/index.php?title=分类:" + star + "星勇士&action=edit&redlink=1}",
+            url
+        )
+        val document =
+            Jsoup.connect("https://wiki.biligame.com/cq/index.php?title=分类:" + star + "星勇士&action=edit&redlink=1")
+                .get()
+        val elements = document.getElementsByClass("mw-category-group")
+        var listHolder: LinkedList<CharacterHolder> = LinkedList()
+        for (ele in elements) {
+            val lis = ele.select("ul>li>a")
+            for (li in lis) {
+                val href = WIKI_BASE_PATH + li.select("a").attr("href")
+                val heroName = li.select("a").attr("title")
+                listHolder.add(processHeroPage(href, heroName))
+            }
+        }
         return listHolder
     }
 
@@ -102,7 +127,7 @@ class CacheCharacterServer : IServer {
     private fun processContent(heroStory: String, quote: String): String {
 //        var result = heroStory
 
-      var  result = heroStory.ifEmpty { quote }
+        var result = heroStory.ifEmpty { quote }
 
         if (result.length > THIRTY)
             result = result.substring(0, THIRTY) + ETC
@@ -117,10 +142,12 @@ class CacheCharacterServer : IServer {
 
 //fun main() {
 //
-//    val server = CacheChatacterServer()
-//    println(server.defaultImgUrl(""))
-//    println(server.defaultImgUrl(null))
-//    println(server.defaultImgUrl("小山"))
-//    println(server.defaultImgUrl("null"))
-//    print(3423)
+//    val repository = CharacterRepository()
+//    val server = CacheCharacterServer()
+//    repository.saveAll(server.generateAllFromWeb())
+////    println(server.defaultImgUrl(""))
+////    println(server.defaultImgUrl(null))
+////    println(server.defaultImgUrl("小山"))
+////    println(server.defaultImgUrl("null"))
+////    print(3423)
 //}

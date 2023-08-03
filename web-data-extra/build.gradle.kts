@@ -14,3 +14,10 @@ dependencies {
 ////        原文链接：https://blog.csdn.net/qq_35529969/article/details/124843352
 //    keepJavacAnnotationProcessors = true
 //}
+tasks.bootJar.configure {
+    //排除外部jar
+//        https://blog.csdn.net/yumo_fly/article/details/130272322
+    //启动类设置
+    manifest.attributes["Start-Class"] = "org.web.data.extra.WebDataExtraApplicationKt"
+
+}
